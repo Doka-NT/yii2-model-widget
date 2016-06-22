@@ -1,0 +1,22 @@
+{
+    "name": "skobka/yii2-model-widget",
+    "description": "Provide input widget to select related models",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Soshnikov Artem",
+            "email": "213036@skobka.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "2.0.*",
+        "kartik-v/yii2-widget-select2": "2.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "skobka\\yii2\\modelWidget\\": "src/"
+        }
+    }
+}
