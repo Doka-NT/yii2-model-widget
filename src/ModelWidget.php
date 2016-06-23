@@ -43,9 +43,11 @@ class ModelWidget extends InputWidget
      */
     public function run()
     {
+        $targetAttribute = $this->getTargetAttribute();
+
         echo Select2::widget([
             'model' => $this->model,
-            'attribute' => $this->attribute,
+            'attribute' => $targetAttribute,
             'data' => $this->getDataOptions(),
         ]);
     }
@@ -59,11 +61,47 @@ class ModelWidget extends InputWidget
             return $this->data;
         }
 
-        $rel = $this->model->getRelation($this->attribute);
-        /* @var $modelClass ActiveRecord */
-        $modelClass = $rel->modelClass;
-        $options = BaseArrayHelper::map($modelClass::find()->all(), $this->model->primaryKey(), $this->titleAttr);
+        $modelClass = $this->getTargetModelClass();
+        $options = BaseArrayHelper::map($modelClass::find()->all(), $this->getTargetPrimaryKey(), $this->titleAttr);
 
         return $options;
+    }
+
+    /**
+     * @return string|ActiveRecord
+     */
+    protected function getTargetModelClass()
+    {
+        return $this->getRelation()->modelClass;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|\yii\db\ActiveQueryInterface
+     */
+    protected function getRelation()
+    {
+        $relation = $this->model->getRelation($this->attribute);
+
+        return $relation;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTargetAttribute()
+    {
+        $pk = $this->getTargetPrimaryKey();
+        $relation = $this->getRelation();
+        return $relation->link[$pk];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTargetPrimaryKey()
+    {
+        $modelClass = $this->getTargetModelClass();
+
+        return reset($modelClass::primaryKey());
     }
 }
