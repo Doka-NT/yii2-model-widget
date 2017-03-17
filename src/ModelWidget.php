@@ -101,7 +101,8 @@ class ModelWidget extends InputWidget
     protected function getTargetPrimaryKey()
     {
         $modelClass = $this->getTargetModelClass();
+        $primaryKeys = $modelClass::primaryKey();
 
-        return reset($modelClass::primaryKey());
+        return reset($primaryKeys);
     }
 }
